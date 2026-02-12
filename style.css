@@ -9,8 +9,9 @@ body {
   background: linear-gradient(140deg, #e2e8f0, #f8fafc 55%, #dbeafe);
 }
 
+
 .hub-layout {
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
   display: flex;
 }
 
@@ -35,7 +36,9 @@ body {
 }
 
 #welcome-panel,
-#app-panel {
+#app-panel,
+#profile-panel,
+#settings-panel {
   max-width: 1050px;
 }
 
@@ -46,12 +49,45 @@ body {
   display: block;
 }
 
+#profile-panel .form-control:focus,
+#profile-panel .form-select:focus {
+  border-color: #64748b;
+  box-shadow: 0 0 0 0.2rem rgba(100, 116, 139, 0.25);
+}
+
+#profile-panel textarea {
+  resize: vertical;
+}
+
+#settings-panel .form-control:focus,
+#settings-panel .form-select:focus {
+  border-color: #64748b;
+  box-shadow: 0 0 0 0.2rem rgba(100, 116, 139, 0.25);
+}
+
+body.compact-mode .hub-sidebar {
+  width: 220px;
+}
+
+body.compact-mode .hub-sidebar .nav-link {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+body.compact-mode .hub-content {
+  font-size: 0.95rem;
+}
+
 @media (max-width: 768px) {
   .hub-layout {
     flex-direction: column;
   }
 
   .hub-sidebar {
+    width: 100%;
+  }
+
+  body.compact-mode .hub-sidebar {
     width: 100%;
   }
 
