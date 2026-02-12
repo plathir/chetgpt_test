@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="el">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <div class="container-flex">
+      <section>
+        <h2>Οδηγίες Χρήσης</h2>
+        <ol>
+          <li>Ανοίξτε τη σελίδα στο πρόγραμμα περιήγησής σας.</li>
+          <li>Πληκτρολογήστε το μήνυμά σας στο πεδίο εισαγωγής.</li>
+          <li>Πατήστε το κουμπί "Προσθήκη" για να προσθέσετε μια εργασία.</li>
+          <li>Οι εργασίες εμφανίζονται στη λίστα παρακάτω.</li>
+          <li>Μπορείτε να ολοκληρώσετε ή να διαγράψετε εργασίες με τα αντίστοιχα κουμπιά.</li>
+          <li>Πατήστε "Καθαρισμός ολοκληρωμένων" για να διαγράψετε όλες τις ολοκληρωμένες εργασίες.</li>
+        </ol>
+        <p>Για οποιοδήποτε πρόβλημα, επικοινωνήστε με τον διαχειριστή του συστήματος.</p>
+      </section>
+      <main class="todo-app">
+        <h1>📋 Todo List</h1>
+        <form id="todo-form">
+          <input id="todo-input" type="text" placeholder="Πρόσθεσε μια εργασία..." required />
+          <button class="add-btn" type="submit">Προσθήκη</button>
+        </form>
+        <ul id="todo-list" aria-live="polite"></ul>
+        <p id="empty-state" class="empty-state">Δεν υπάρχουν εργασίες ακόμα.</p>
+        <button id="clear-completed" class="clear-btn" type="button">Καθαρισμός ολοκληρωμένων</button>
+        <button id="save-todos" class="save-btn" type="button">Αποθήκευση</button>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
