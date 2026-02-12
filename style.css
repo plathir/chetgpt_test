@@ -1,97 +1,64 @@
-/* styles.css για το Todo List project */
-:root {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  color-scheme: light dark;
+﻿:root {
+  --sidebar-bg: #16213e;
+  --sidebar-accent: #0f3460;
+  --page-bg: #f1f5f9;
+  --card-bg: #ffffff;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #1d4ed8);
+  background: radial-gradient(circle at top right, #dbeafe, #f8fafc 45%, #eef2ff 100%);
 }
 
-.container-flex {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 32px;
-  width: 100vw;
+.app-layout {
   min-height: 100vh;
-  box-sizing: border-box;
-}
-
-section {
-  background: #f0f0f0;
-  padding: 16px;
-  border-radius: 8px;
-  max-width: 320px;
-  width: 100%;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  font-size: 0.97rem;
-  text-align: left;
-  margin-top: 40px;
-}
-
-.todo-app {
-  width: min(92vw, 560px);
-  background: #ffffff;
-  color: #0f172a;
-  border-radius: 16px;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
-  padding: 24px;
-  margin-top: 40px;
-}
-
-h1 {
-  margin-top: 0;
-}
-
-form {
   display: flex;
-  gap: 8px;
 }
 
-input[type='text'] {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  font-size: 1rem;
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, var(--sidebar-bg), var(--sidebar-accent));
 }
 
-button {
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 0;
-  cursor: pointer;
-  font-weight: 600;
+.sidebar .nav-link {
+  color: #dbeafe;
+  border: 1px solid rgba(219, 234, 254, 0.2);
 }
 
-.add-btn {
-  background: #2563eb;
-  color: #fff;
-}
-
-.clear-btn {
-  margin-top: 12px;
-  background: #e2e8f0;
+.sidebar .nav-link.active {
+  background: #dbeafe;
   color: #0f172a;
+  border-color: #dbeafe;
 }
 
-ul {
+.content-area {
+  flex: 1;
+  background: transparent;
+}
+
+#welcome-panel,
+.todo-app {
+  background: var(--card-bg);
+  max-width: 920px;
+}
+
+#todo-list {
   list-style: none;
   padding: 0;
-  margin: 16px 0 0;
+  margin: 0;
 }
 
-li {
+#todo-list li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  gap: 12px;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
+  padding: 10px;
   margin-bottom: 8px;
+  background: #fff;
 }
 
 .todo-text.completed {
@@ -102,19 +69,19 @@ li {
 .actions {
   display: flex;
   gap: 6px;
-}
-
-.done-btn {
-  background: #16a34a;
-  color: #fff;
-}
-
-.delete-btn {
-  background: #dc2626;
-  color: #fff;
+  flex-wrap: wrap;
 }
 
 .empty-state {
-  margin-top: 16px;
   color: #475569;
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
 }

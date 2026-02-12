@@ -1,3 +1,7 @@
+﻿const navTodoButton = document.getElementById('nav-todo');
+const welcomePanel = document.getElementById('welcome-panel');
+const todoPanel = document.getElementById('todo-panel');
+
 const todoForm = document.getElementById('todo-form');
 const todoInput = document.getElementById('todo-input');
 const todoList = document.getElementById('todo-list');
@@ -7,21 +11,31 @@ const saveButton = document.getElementById('save-todos');
 
 let todos = [];
 
-// Load todos from sessionStorage if available
-const savedTodos = sessionStorage.getItem('todos');
-if (savedTodos) {
-  try {
-    todos = JSON.parse(savedTodos);
-  } catch (e) {
-    todos = [];
+function showTodoApp() {
+  if (welcomePanel) {
+    welcomePanel.classList.add('d-none');
+  }
+  if (todoPanel) {
+    todoPanel.classList.remove('d-none');
+  }
+  if (navTodoButton) {
+    navTodoButton.classList.add('active');
   }
 }
-// Save todos to sessionStorage
+
+if (navTodoButton) {
+  navTodoButton.addEventListener('click', showTodoApp);
+}
+
 function saveTodosToSession() {
   sessionStorage.setItem('todos', JSON.stringify(todos));
 }
 
 function renderTodos() {
+  if (!todoList || !emptyState) {
+    return;
+  }
+
   todoList.innerHTML = '';
 
   if (todos.length === 0) {
@@ -43,7 +57,7 @@ function renderTodos() {
 
     const doneButton = document.createElement('button');
     doneButton.type = 'button';
-    doneButton.className = 'done-btn';
+    doneButton.className = 'btn btn-success btn-sm';
     doneButton.textContent = todo.completed ? 'Αναίρεση' : 'Ολοκλήρωση';
     doneButton.addEventListener('click', () => {
       todo.completed = !todo.completed;
@@ -51,10 +65,9 @@ function renderTodos() {
       saveTodosToSession();
     });
 
-    // Edit button
     const editButton = document.createElement('button');
     editButton.type = 'button';
-    editButton.className = 'edit-btn';
+    editButton.className = 'btn btn-warning btn-sm';
     editButton.textContent = 'Επεξεργασία';
     editButton.addEventListener('click', () => {
       const newText = prompt('Επεξεργασία εργασίας:', todo.text);
@@ -70,10 +83,10 @@ function renderTodos() {
 
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
-    deleteButton.className = 'delete-btn';
+    deleteButton.className = 'btn btn-danger btn-sm';
     deleteButton.textContent = 'Διαγραφή';
     deleteButton.addEventListener('click', () => {
-      const confirmed = confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή την εργασία;');
+      const confirmed = confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτή την εργασία;');
       if (confirmed) {
         todos = todos.filter((currentTodo) => currentTodo.id !== todo.id);
         renderTodos();
@@ -87,35 +100,50 @@ function renderTodos() {
   });
 }
 
-todoForm.addEventListener('submit', (event) => {
-  event.preventDefault();
+if (todoForm && todoInput) {
+  todoForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-  const text = todoInput.value.trim();
-  if (!text) {
-    return;
-  }
+    const text = todoInput.value.trim();
+    if (!text) {
+      return;
+    }
 
-  todos.push({
-    id: crypto.randomUUID(),
-    text,
-    completed: false,
+    todos.push({
+      id: crypto.randomUUID(),
+      text,
+      completed: false,
+    });
+
+    todoInput.value = '';
+    todoInput.focus();
+    renderTodos();
+    saveTodosToSession();
   });
+}
 
-  todoInput.value = '';
-  todoInput.focus();
-  renderTodos();
-  saveTodosToSession();
-});
+if (clearCompletedButton) {
+  clearCompletedButton.addEventListener('click', () => {
+    todos = todos.filter((todo) => !todo.completed);
+    renderTodos();
+    saveTodosToSession();
+  });
+}
 
-clearCompletedButton.addEventListener('click', () => {
-  todos = todos.filter((todo) => !todo.completed);
-  renderTodos();
-});
+if (saveButton) {
+  saveButton.addEventListener('click', () => {
+    saveTodosToSession();
+    alert('Οι εργασίες αποθηκεύτηκαν στο session!');
+  });
+}
 
-// Save button event
-saveButton.addEventListener('click', () => {
-  saveTodosToSession();
-  alert('Οι εργασίες αποθηκεύτηκαν στο session!');
-});
+const savedTodos = sessionStorage.getItem('todos');
+if (savedTodos) {
+  try {
+    todos = JSON.parse(savedTodos);
+  } catch (e) {
+    todos = [];
+  }
+}
 
 renderTodos();
