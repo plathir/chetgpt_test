@@ -1,48 +1,10 @@
-const STORAGE_KEY = 'todo-list-items';
-
 const todoForm = document.getElementById('todo-form');
 const todoInput = document.getElementById('todo-input');
 const todoList = document.getElementById('todo-list');
 const emptyState = document.getElementById('empty-state');
 const clearCompletedButton = document.getElementById('clear-completed');
 
-function loadTodos() {
-  try {
-    const storedTodos = localStorage.getItem(STORAGE_KEY);
-    if (!storedTodos) {
-      return [];
-    }
-
-    const parsedTodos = JSON.parse(storedTodos);
-    if (!Array.isArray(parsedTodos)) {
-      return [];
-    }
-
-    return parsedTodos
-      .filter((todo) => todo && typeof todo.text === 'string')
-      .map((todo) => ({
-        id: String(todo.id || createTodoId()),
-        text: todo.text,
-        completed: Boolean(todo.completed),
-      }));
-  } catch {
-    return [];
-  }
-}
-
-function saveTodos() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-}
-
-function createTodoId() {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID();
-  }
-
-  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-}
-
-let todos = loadTodos();
+let todos = [];
 
 function renderTodos() {
   todoList.innerHTML = '';
@@ -70,7 +32,6 @@ function renderTodos() {
     doneButton.textContent = todo.completed ? 'Αναίρεση' : 'Ολοκλήρωση';
     doneButton.addEventListener('click', () => {
       todo.completed = !todo.completed;
-      saveTodos();
       renderTodos();
     });
 
@@ -80,7 +41,6 @@ function renderTodos() {
     deleteButton.textContent = 'Διαγραφή';
     deleteButton.addEventListener('click', () => {
       todos = todos.filter((currentTodo) => currentTodo.id !== todo.id);
-      saveTodos();
       renderTodos();
     });
 
@@ -99,20 +59,18 @@ todoForm.addEventListener('submit', (event) => {
   }
 
   todos.push({
-    id: createTodoId(),
+    id: crypto.randomUUID(),
     text,
     completed: false,
   });
 
   todoInput.value = '';
   todoInput.focus();
-  saveTodos();
   renderTodos();
 });
 
 clearCompletedButton.addEventListener('click', () => {
   todos = todos.filter((todo) => !todo.completed);
-  saveTodos();
   renderTodos();
 });
 
