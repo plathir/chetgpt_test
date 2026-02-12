@@ -1,149 +1,49 @@
-﻿const navTodoButton = document.getElementById('nav-todo');
+﻿const navTodo = document.getElementById('nav-todo');
+const navCrop = document.getElementById('nav-crop');
 const welcomePanel = document.getElementById('welcome-panel');
-const todoPanel = document.getElementById('todo-panel');
+const appPanel = document.getElementById('app-panel');
+const appFrame = document.getElementById('app-frame');
+const appTitle = document.getElementById('app-title');
+const navButtons = [navTodo, navCrop].filter(Boolean);
 
-const todoForm = document.getElementById('todo-form');
-const todoInput = document.getElementById('todo-input');
-const todoList = document.getElementById('todo-list');
-const emptyState = document.getElementById('empty-state');
-const clearCompletedButton = document.getElementById('clear-completed');
-const saveButton = document.getElementById('save-todos');
-
-let todos = [];
-
-function showTodoApp() {
+function openApp(name, path) {
   if (welcomePanel) {
     welcomePanel.classList.add('d-none');
   }
-  if (todoPanel) {
-    todoPanel.classList.remove('d-none');
+
+  if (appPanel) {
+    appPanel.classList.remove('d-none');
   }
-  if (navTodoButton) {
-    navTodoButton.classList.add('active');
+
+  if (appTitle) {
+    appTitle.textContent = name;
+  }
+
+  if (appFrame && appFrame.getAttribute('src') !== path) {
+    appFrame.setAttribute('src', path);
   }
 }
 
-if (navTodoButton) {
-  navTodoButton.addEventListener('click', showTodoApp);
-}
-
-function saveTodosToSession() {
-  sessionStorage.setItem('todos', JSON.stringify(todos));
-}
-
-function renderTodos() {
-  if (!todoList || !emptyState) {
-    return;
-  }
-
-  todoList.innerHTML = '';
-
-  if (todos.length === 0) {
-    emptyState.hidden = false;
-    return;
-  }
-
-  emptyState.hidden = true;
-
-  todos.forEach((todo) => {
-    const listItem = document.createElement('li');
-
-    const text = document.createElement('span');
-    text.className = `todo-text${todo.completed ? ' completed' : ''}`;
-    text.textContent = todo.text;
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-
-    const doneButton = document.createElement('button');
-    doneButton.type = 'button';
-    doneButton.className = 'btn btn-success btn-sm';
-    doneButton.textContent = todo.completed ? 'Αναίρεση' : 'Ολοκλήρωση';
-    doneButton.addEventListener('click', () => {
-      todo.completed = !todo.completed;
-      renderTodos();
-      saveTodosToSession();
-    });
-
-    const editButton = document.createElement('button');
-    editButton.type = 'button';
-    editButton.className = 'btn btn-warning btn-sm';
-    editButton.textContent = 'Επεξεργασία';
-    editButton.addEventListener('click', () => {
-      const newText = prompt('Επεξεργασία εργασίας:', todo.text);
-      if (newText !== null) {
-        const trimmed = newText.trim();
-        if (trimmed) {
-          todo.text = trimmed;
-          renderTodos();
-          saveTodosToSession();
-        }
-      }
-    });
-
-    const deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.className = 'btn btn-danger btn-sm';
-    deleteButton.textContent = 'Διαγραφή';
-    deleteButton.addEventListener('click', () => {
-      const confirmed = confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτή την εργασία;');
-      if (confirmed) {
-        todos = todos.filter((currentTodo) => currentTodo.id !== todo.id);
-        renderTodos();
-        saveTodosToSession();
-      }
-    });
-
-    actions.append(doneButton, editButton, deleteButton);
-    listItem.append(text, actions);
-    todoList.appendChild(listItem);
-  });
-}
-
-if (todoForm && todoInput) {
-  todoForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const text = todoInput.value.trim();
-    if (!text) {
-      return;
+function setActiveNav(activeButton) {
+  navButtons.forEach((button) => {
+    if (button === activeButton) {
+      button.classList.add('active');
+    } else {
+      button.classList.remove('active');
     }
-
-    todos.push({
-      id: crypto.randomUUID(),
-      text,
-      completed: false,
-    });
-
-    todoInput.value = '';
-    todoInput.focus();
-    renderTodos();
-    saveTodosToSession();
   });
 }
 
-if (clearCompletedButton) {
-  clearCompletedButton.addEventListener('click', () => {
-    todos = todos.filter((todo) => !todo.completed);
-    renderTodos();
-    saveTodosToSession();
+if (navTodo) {
+  navTodo.addEventListener('click', () => {
+    setActiveNav(navTodo);
+    openApp('ToDo List', 'apps/todolist/index.html');
   });
 }
 
-if (saveButton) {
-  saveButton.addEventListener('click', () => {
-    saveTodosToSession();
-    alert('Οι εργασίες αποθηκεύτηκαν στο session!');
+if (navCrop) {
+  navCrop.addEventListener('click', () => {
+    setActiveNav(navCrop);
+    openApp('Crop Image', 'apps/cropimage/index.html');
   });
 }
-
-const savedTodos = sessionStorage.getItem('todos');
-if (savedTodos) {
-  try {
-    todos = JSON.parse(savedTodos);
-  } catch (e) {
-    todos = [];
-  }
-}
-
-renderTodos();
