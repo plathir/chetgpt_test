@@ -15,6 +15,7 @@
 - `index.html` στο root: κεντρική οθόνη (hub) με side panel.
 - `apps/todolist`: εφαρμογή Todo List.
 - `apps/cropimage`: εφαρμογή Crop Image.
+- `apps/editabletable`: εφαρμογή Editable Table.
 
 Οι εφαρμογές φορτώνονται μέσα στο hub από το αριστερό menu.
 
@@ -32,6 +33,10 @@
     │   ├── app.js
     │   └── style.css
     └── cropimage
+        ├── index.html
+        ├── app.js
+        └── style.css
+    └── editabletable
         ├── index.html
         ├── app.js
         └── style.css
@@ -55,6 +60,14 @@
 - Crop της επιλεγμένης περιοχής.
 - Reset στην αρχική εικόνα.
 - Download του αποτελέσματος ως PNG.
+
+### 3) Editable Table (`apps/editabletable`)
+Δυνατότητες:
+- Επεξεργασία κελιών inline.
+- Προσθήκη γραμμής.
+- Προσθήκη νέας στήλης.
+- Διαγραφή γραμμής.
+- Αποθήκευση πίνακα στο `sessionStorage`.
 
 ## Εκκίνηση Τοπικά
 

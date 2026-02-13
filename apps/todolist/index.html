@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<html lang="el">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,16 +16,16 @@
     <main class="todo-shell container py-4">
       <section class="card border-0 shadow-sm todo-app">
         <div class="card-body">
-          <h1 class="h4 mb-3">ToDo List</h1>
+          <h1 id="todo-title" class="h4 mb-3">ToDo List</h1>
           <form id="todo-form" class="d-flex gap-2">
-            <input id="todo-input" class="form-control" type="text" placeholder="Πρόσθεσε μια εργασία..." required />
-            <button class="btn btn-primary" type="submit">Προσθήκη</button>
+            <input id="todo-input" class="form-control" type="text" placeholder="Add a task..." required />
+            <button id="todo-add-btn" class="btn btn-primary" type="submit">Add</button>
           </form>
           <ul id="todo-list" class="mt-3" aria-live="polite"></ul>
-          <p id="empty-state" class="empty-state mt-3 mb-0">Δεν υπάρχουν εργασίες ακόμα.</p>
+          <p id="empty-state" class="empty-state mt-3 mb-0">No tasks yet.</p>
           <div class="d-flex gap-2 mt-3 flex-wrap">
-            <button id="clear-completed" class="btn btn-outline-secondary" type="button">Καθαρισμός Ολοκληρωμένων</button>
-            <button id="save-todos" class="btn btn-success" type="button">Αποθήκευση</button>
+            <button id="clear-completed" class="btn btn-outline-secondary" type="button">Clear Completed</button>
+            <button id="save-todos" class="btn btn-success" type="button">Save</button>
           </div>
         </div>
       </section>

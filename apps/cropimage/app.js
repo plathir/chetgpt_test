@@ -6,6 +6,9 @@ const statusText = document.getElementById('status-text');
 const canvas = document.getElementById('crop-canvas');
 const ctx = canvas.getContext('2d');
 
+const HUB_SETTINGS_KEY = 'hub_settings_data';
+
+let currentLanguage = 'en';
 const image = new Image();
 let imageLoaded = false;
 let isDragging = false;
@@ -13,6 +16,67 @@ let startX = 0;
 let startY = 0;
 let currentRect = null;
 let baseImageData = null;
+
+const TRANSLATIONS = {
+  en: {
+    title: 'Crop Image',
+    crop: 'Crop',
+    reset: 'Reset',
+    download: 'Download',
+    initialStatus: 'Load an image and drag on canvas to select crop area.',
+    selectAreaStatus: 'Drag on image to select crop area.',
+    tooSmall: 'Selection is too small. Try again.',
+    pressCrop: 'Press Crop to cut the selected area.',
+    selectFirst: 'Select an area on the image first.',
+    cropDone: 'Crop completed. You can now download the image.',
+    resetDone: 'Image reset to original.',
+  },
+  el: {
+    title: 'Περικοπή Εικόνας',
+    crop: 'Περικοπή',
+    reset: 'Επαναφορά',
+    download: 'Λήψη',
+    initialStatus: 'Φόρτωσε εικόνα και σύρε στο canvas για να ορίσεις περιοχή περικοπής.',
+    selectAreaStatus: 'Σύρε πάνω στην εικόνα για να επιλέξεις περιοχή περικοπής.',
+    tooSmall: 'Η επιλογή είναι πολύ μικρή. Δοκίμασε ξανά.',
+    pressCrop: 'Πάτησε Περικοπή για να κόψεις την επιλεγμένη περιοχή.',
+    selectFirst: 'Επέλεξε πρώτα περιοχή πάνω στην εικόνα.',
+    cropDone: 'Η περικοπή ολοκληρώθηκε. Μπορείς τώρα να κατεβάσεις την εικόνα.',
+    resetDone: 'Η εικόνα επανήλθε στην αρχική κατάσταση.',
+  },
+};
+
+function getLanguageFromSettings() {
+  const rawSettings = localStorage.getItem(HUB_SETTINGS_KEY);
+  if (!rawSettings) {
+    return 'en';
+  }
+
+  try {
+    const settings = JSON.parse(rawSettings);
+    return settings.language === 'el' ? 'el' : 'en';
+  } catch {
+    return 'en';
+  }
+}
+
+function t() {
+  return TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+}
+
+function applyLanguage() {
+  const translation = t();
+  document.documentElement.lang = currentLanguage;
+
+  const title = document.getElementById('crop-title');
+  if (title) {
+    title.textContent = translation.title;
+  }
+
+  cropButton.textContent = translation.crop;
+  resetButton.textContent = translation.reset;
+  downloadButton.textContent = translation.download;
+}
 
 function setStatus(text) {
   statusText.textContent = text;
@@ -74,7 +138,7 @@ imageInput.addEventListener('change', (event) => {
     cropButton.disabled = false;
     resetButton.disabled = false;
     downloadButton.disabled = true;
-    setStatus('Σύρε πάνω στην εικόνα για να επιλέξεις περιοχή crop.');
+    setStatus(t().selectAreaStatus);
     URL.revokeObjectURL(objectUrl);
   };
   image.src = objectUrl;
@@ -109,15 +173,15 @@ window.addEventListener('mouseup', () => {
   if (!currentRect || currentRect.w < 2 || currentRect.h < 2) {
     currentRect = null;
     redrawBase();
-    setStatus('Η επιλογή είναι πολύ μικρή. Δοκίμασε ξανά.');
+    setStatus(t().tooSmall);
     return;
   }
-  setStatus('Πάτησε Crop για να κόψεις την επιλεγμένη περιοχή.');
+  setStatus(t().pressCrop);
 });
 
 cropButton.addEventListener('click', () => {
   if (!currentRect || !imageLoaded) {
-    setStatus('Επίλεξε πρώτα περιοχή πάνω στην εικόνα.');
+    setStatus(t().selectFirst);
     return;
   }
 
@@ -142,7 +206,7 @@ cropButton.addEventListener('click', () => {
   baseImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   currentRect = null;
   downloadButton.disabled = false;
-  setStatus('Το crop ολοκληρώθηκε. Μπορείς να κατεβάσεις την εικόνα.');
+  setStatus(t().cropDone);
 });
 
 resetButton.addEventListener('click', () => {
@@ -152,7 +216,7 @@ resetButton.addEventListener('click', () => {
   currentRect = null;
   drawImageAndStore();
   downloadButton.disabled = true;
-  setStatus('Έγινε reset στην αρχική εικόνα.');
+  setStatus(t().resetDone);
 });
 
 downloadButton.addEventListener('click', () => {
@@ -161,3 +225,7 @@ downloadButton.addEventListener('click', () => {
   link.href = canvas.toDataURL('image/png');
   link.click();
 });
+
+currentLanguage = getLanguageFromSettings();
+applyLanguage();
+setStatus(t().initialStatus);

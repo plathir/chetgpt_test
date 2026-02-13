@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="el">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,16 +16,14 @@
     <main class="container py-4 crop-shell">
       <section class="card border-0 shadow-sm">
         <div class="card-body">
-          <h1 class="h4 mb-3">Crop Image</h1>
+          <h1 id="crop-title" class="h4 mb-3">Crop Image</h1>
           <div class="d-flex flex-wrap gap-2 mb-3">
             <input id="image-input" class="form-control form-control-sm input-file" type="file" accept="image/*" />
             <button id="crop-btn" class="btn btn-primary btn-sm" type="button" disabled>Crop</button>
             <button id="reset-btn" class="btn btn-outline-secondary btn-sm" type="button" disabled>Reset</button>
             <button id="download-btn" class="btn btn-success btn-sm" type="button" disabled>Download</button>
           </div>
-          <p id="status-text" class="text-muted small mb-2">
-            Φόρτωσε εικόνα και σύρε πάνω στο canvas για να ορίσεις περιοχή crop.
-          </p>
+          <p id="status-text" class="text-muted small mb-2">Load an image and drag on canvas to select crop area.</p>
           <div class="canvas-wrap">
             <canvas id="crop-canvas"></canvas>
           </div>

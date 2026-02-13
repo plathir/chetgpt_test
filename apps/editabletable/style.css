@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.table-shell {
+  max-width: 1100px;
+}
+
+.table-wrap {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  overflow-x: auto;
+}
+
+.data-io-panel {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 12px;
+}
+
+#editable-table {
+  min-width: 700px;
+}
+
+#editable-table th,
+#editable-table td {
+  vertical-align: middle;
+}
+
+.row-actions {
+  width: 150px;
+  text-align: center;
+}
+
+.crud-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.crud-modal-dialog {
+  width: min(560px, 100%);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.25);
+  overflow: hidden;
+}
+
+.crud-modal-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.crud-modal-body {
+  padding: 14px 16px 16px;
+}
