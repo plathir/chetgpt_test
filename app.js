@@ -1,3 +1,4 @@
+const navbarLanguageSelect = document.getElementById('navbar-language-select');
 const navTodo = document.getElementById('nav-todo');
 const navCrop = document.getElementById('nav-crop');
 const navTable = document.getElementById('nav-table');
@@ -34,6 +35,8 @@ const APP_CONFIG = {
     names: { en: 'Editable Table', el: 'Επεξεργάσιμος Πίνακας' },
   },
 };
+
+const SIDEBAR_APP_KEY_STORAGE = 'hub_sidebar_app_key';
 
 const TRANSLATIONS = {
   en: {
@@ -203,6 +206,35 @@ function applyLanguage(language) {
   setOptionText('settings-start-page', 'todo', t.startTodo);
   setOptionText('settings-start-page', 'crop', t.startCrop);
   setOptionText('settings-start-page', 'table', t.startTable);
+  if (navbarLanguageSelect) {
+    navbarLanguageSelect.value = currentLanguage;
+    navbarLanguageSelect.querySelector('option[value="en"]').textContent = 'EN';
+    navbarLanguageSelect.querySelector('option[value="el"]').textContent = 'EL';
+  }
+if (navbarLanguageSelect) {
+  navbarLanguageSelect.addEventListener('change', (event) => {
+    const lang = event.target.value;
+    // Αποθηκεύει τη γλώσσα στις ρυθμίσεις
+    const rawSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    let settings = {};
+    if (rawSettings) {
+      try {
+        settings = JSON.parse(rawSettings);
+      } catch {}
+    }
+    settings.language = lang;
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    applyLanguage(lang);
+    // Refresh το iframe της εφαρμογής αν είναι ανοιχτή
+    if (appPanel && !appPanel.classList.contains('d-none') && appFrame && currentAppKey) {
+      const appConfig = APP_CONFIG[currentAppKey];
+      if (appConfig && appFrame.getAttribute('src') === appConfig.path) {
+        // Force reload by resetting src
+        appFrame.setAttribute('src', appConfig.path);
+      }
+    }
+  });
+}
 
   if (currentAppKey && appTitle) {
     appTitle.textContent = getAppName(currentAppKey);
@@ -235,6 +267,8 @@ function openApp(appKey) {
 
   showOnlyPanel('app');
   currentAppKey = appKey;
+  // Αποθηκεύει το επιλεγμένο appKey
+  localStorage.setItem(SIDEBAR_APP_KEY_STORAGE, appKey);
 
   if (appTitle) {
     appTitle.textContent = getAppName(appKey);
@@ -443,7 +477,19 @@ if (navTable) {
 loadProfileData();
 const settingsData = loadSettingsData();
 
-if (settingsData.startPage === 'todo') {
+// Επαναφέρει το τελευταίο appKey που ήταν επιλεγμένο στο sidebar
+const lastSidebarAppKey = localStorage.getItem(SIDEBAR_APP_KEY_STORAGE);
+if (lastSidebarAppKey && APP_CONFIG[lastSidebarAppKey]) {
+  // Ενεργοποιεί το αντίστοιχο κουμπί
+  if (lastSidebarAppKey === 'todo') {
+    setActiveNav(navTodo);
+  } else if (lastSidebarAppKey === 'crop') {
+    setActiveNav(navCrop);
+  } else if (lastSidebarAppKey === 'table') {
+    setActiveNav(navTable);
+  }
+  openApp(lastSidebarAppKey);
+} else if (settingsData.startPage === 'todo') {
   openTodoApp();
 } else if (settingsData.startPage === 'crop') {
   openCropApp();

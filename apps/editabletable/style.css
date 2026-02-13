@@ -1,3 +1,7 @@
+/* Hide multi-selection actions if not active */
+.multi-selection-hidden {
+  display: none !important;
+}
 body {
   margin: 0;
   min-height: 100vh;

@@ -8,6 +8,7 @@ const deleteSelectedButton = document.getElementById('delete-selected-btn');
 const duplicateSelectedButton = document.getElementById('duplicate-selected-btn');
 const clearSelectionButton = document.getElementById('clear-selection-btn');
 const selectionCountText = document.getElementById('selection-count');
+const multiSelectionActions = document.getElementById('multi-selection-actions');
 const exportFormatLabel = document.getElementById('export-format-label');
 const exportFormatSelect = document.getElementById('export-format');
 const runExportButton = document.getElementById('run-export-btn');
@@ -194,6 +195,13 @@ function updateSelectionUi() {
   deleteSelectedButton.disabled = !hasSelection;
   duplicateSelectedButton.disabled = !hasSelection;
   clearSelectionButton.disabled = !hasSelection;
+  if (multiSelectionActions) {
+    if (hasSelection) {
+      multiSelectionActions.classList.remove('multi-selection-hidden');
+    } else {
+      multiSelectionActions.classList.add('multi-selection-hidden');
+    }
+  }
 }
 
 function applyLanguage() {
